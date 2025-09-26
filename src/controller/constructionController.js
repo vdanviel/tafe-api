@@ -35,21 +35,71 @@ class Controller {
 	}
 
 	async update(constructionId, projectName, description, address, startDate, endDate, manager) {
-		const data = {
+
+		// 1. Agrupa todos os argumentos de atualização em um único objeto.
+		const potentialUpdates = {
 			projectName,
 			description,
 			address,
-			startDate: Util.formatDate(startDate),
-			endDate: endDate ? Util.formatDate(endDate) : null,
-			manager,
-			updatedAt: Util.currentDateTime('America/Sao_Paulo')
+			startDate,
+			endDate,
+			manager
 		};
+
+		// 2. Constrói dinamicamente o objeto $set, processando apenas os valores definidos.
+		// Object.entries transforma {a: 1, b: 2} em [['a', 1], ['b', 2]]
+		// .reduce() itera sobre esse array para construir um novo objeto final.
+		const fieldsToUpdate = Object.entries(potentialUpdates).reduce((acc, [key, value]) => {
+			// Ignora qualquer chave cujo valor seja undefined
+			if (value === undefined) {
+				return acc;
+			}
+
+			// Aplica lógicas especiais para campos específicos
+			if (key === 'startDate') {
+				acc[key] = Util.formatDate(value);
+			} else if(key === 'address'){
+
+				if (value != null) {
+
+					// Verifica se é array
+					if (typeof value != 'object') {
+						return { error: "O dado 'address' deve ser um objeto." };
+					}
+
+				}
+
+				acc[key] = value;
+			} else if (key === 'endDate') {
+				// Permite que a data de término seja definida como null
+				acc[key] = value ? Util.formatDate(value) : null;
+			} else {
+				// Para todos os outros campos, apenas copia o valor
+				acc[key] = value;
+			}
+
+			return acc;
+		}, {}); // Inicia com um acumulador (acc) que é um objeto vazio.
+
+		// 3. Se nenhum campo válido foi enviado, não há necessidade de atualizar o DB.
+		if (Object.keys(fieldsToUpdate).length === 0) {
+			// Retorna o objeto existente sem alterá-lo.
+			return await this.find(constructionId); 
+		}
+
+		// 4. Adiciona a data de atualização e executa a query.
+		fieldsToUpdate.updatedAt = Util.currentDateTime('America/Sao_Paulo');
 
 		const result = await Construction.updateOne(
 			{ _id: new ObjectId(constructionId) },
-			{ $set: data }
+			{ $set: fieldsToUpdate }
 		);
-		if (result.matchedCount === 0) return { error: "Não encontrado." };
+
+		if (result.matchedCount === 0) {
+			return { error: "Não encontrado." };
+		}
+
+		// Retorna o documento recém-atualizado.
 		return await this.find(constructionId);
 	}
 
