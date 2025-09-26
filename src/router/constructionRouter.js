@@ -8,16 +8,16 @@ const constructionRouter = express.Router();
 
 // Middleware de validação para os dados
 const validateConstructionData = [
-	body('projectName').notEmpty().withMessage('Project name is required'),
-	body('description').notEmpty().withMessage('Description is required'),
-	body('address.street').notEmpty().withMessage('Street is required'),
-	body('address.number').notEmpty().withMessage('Number is required'),
-	body('address.complement').optional(),
-	body('address.neighborhood').notEmpty().withMessage('Neighborhood is required'),
-	body('address.city').notEmpty().withMessage('City is required'),
-	body('startDate').notEmpty().withMessage('Start date is required').isISO8601().withMessage('Start date must be a valid date'),
-	body('endDate').optional().isISO8601().withMessage('End date must be a valid date'),
-	body('manager').notEmpty().withMessage('Manager is required')
+	body('projectName').notEmpty().withMessage('O nome do projeto é obrigatório'),
+	body('description').notEmpty().withMessage('A descrição é obrigatória'),
+	body('address.street').notEmpty().withMessage('A rua é obrigatória'),
+	body('address.number').notEmpty().withMessage('O número é obrigatório'),
+	body('address.complement').optional({ nullable: true }),
+	body('address.neighborhood').notEmpty().withMessage('O bairro é obrigatório'),
+	body('address.city').notEmpty().withMessage('A cidade é obrigatória'),
+	body('startDate').notEmpty().withMessage('A data de início é obrigatória').isISO8601().withMessage('A data de início deve ser uma data válida'),
+	body('endDate').exists().withMessage("A data de término deve ser enviada").optional({ nullable: true }),
+	body('manager').notEmpty().withMessage('O responsável é obrigatório')
 ];
 
 // Buscar por ID

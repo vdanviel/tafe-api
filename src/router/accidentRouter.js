@@ -8,15 +8,15 @@ const accidentRouter = express.Router();
 
 // Middleware de validação para os dados
 const validateAccidentData = [
-	body('cause').notEmpty().withMessage('Cause is required'),
-	body('description').notEmpty().withMessage('Description is required'),
-	body('severity').notEmpty().withMessage('Severity is required').isInt({ min: 1, max: 5 }).withMessage('Severity must be an integer between 1 and 5'),
-	body('constructionId').notEmpty().withMessage('Construction ID is required').isMongoId().withMessage('Construction ID must be a valid MongoDB ID'),
-	body('involved').isArray().withMessage('Involved must be an array').optional(),
-	body('involved.*.firstName').notEmpty().withMessage('First name of involved person is required'),
-	body('involved.*.lastName').notEmpty().withMessage('Last name of involved person is required'),
+	body('cause').notEmpty().withMessage('A causa é obrigatória'),
+	body('description').notEmpty().withMessage('A descrição é obrigatória'),
+	body('severity').notEmpty().withMessage('A gravidade é obrigatória').isInt({ min: 1, max: 5 }).withMessage('A gravidade deve ser um número inteiro entre 1 e 5'),
+	body('constructionId').notEmpty().withMessage('O ID da obra é obrigatório').isMongoId().withMessage('O ID da obra deve ser um MongoDB ID válido'),
+	body('involved').isArray().withMessage('Envolvidos deve ser um array').optional(),
+	body('involved.*.firstName').notEmpty().withMessage('O nome do envolvido é obrigatório'),
+	body('involved.*.lastName').notEmpty().withMessage('O sobrenome do envolvido é obrigatório'),
 	body('involved.*.objectInvolved').optional(),
-	body('involved.*.hurted').isBoolean().withMessage('Hurted must be a boolean'),
+	body('involved.*.hurted').isBoolean().withMessage('Ferido deve ser um valor booleano'),
 	body('involved.*.additionalInformation').optional()
 ];
 

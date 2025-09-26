@@ -20,9 +20,12 @@ class Util {
   }
 
   static formatDate(date) {
-    var today  = new Date(date);
-
-    return today.toLocaleDateString("America/Sao_Paulo");
+    try {
+      const formattedDate = new Date(date + "T00:00:00Z"); // força UTC
+      return formattedDate.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+    } catch (error) {
+      throw new Error("Invalid date format provided to formatDate");
+    }
   }
 
   //libera a data em yyyy-mm-dd hh:ss
