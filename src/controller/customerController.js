@@ -102,7 +102,7 @@ class Controller {
 
         const encodedJwt = jwt.sign({
             data: customerWithoutPassword,
-            scope: ["read:customer", "read:barber"]
+            scope: ["read:accident", "write:accident", "delete:accident", "update:accident", "read:construction", "write:construction", "update:construction", "delete:construction"]
         }, process.env.JWT_SECRET, { expiresIn: '336h' });
 
         return { access_token: encodedJwt };

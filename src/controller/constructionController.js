@@ -4,43 +4,53 @@ import Util from "../util/util.js"; // Importa Util, utilitario do sistema
 
 class Controller {
 	async find(id) {
-		// Busca por ID
-		const construction = await Construction.findOne({ _id: new ObjectId(id) });
+		// Busca por ID com status = true
+		const construction = await Construction.findOne({ _id: new ObjectId(id), status: true });
 		if (!construction) return { error: "Não encontrado." };
 		return construction;
 	}
 
-	async create(value1, value2, value3) {
+	async findAll() {
+		// Busca todos com status = true
+		const constructions = await Construction.find({ status: true }).toArray();
+		return constructions;
+	}
 
-        const data = {
-            value_1: value1,
-            value_2: value2,
-            value_3: value3,
-            status: true,
-            createdAt: Util.currentDateTime('America/Sao_Paulo'),
-            updatedAt: Util.currentDateTime('America/Sao_Paulo')
-        };
-
-        //restante dos dados...
+	async create(projectName, description, address, startDate, endDate, manager) {
+		
+		const data = {
+			projectName,
+			description,
+			address,
+			manager,
+			status: true,
+			startDate: Util.formatDate(startDate),
+			endDate: endDate ? Util.formatDate(endDate) : null,
+			createdAt: Util.currentDateTime('America/Sao_Paulo'),
+			updatedAt: Util.currentDateTime('America/Sao_Paulo')
+		};
 
 		await Construction.insertOne(data);
 		return data;
 	}
 
-	async update(constructionId, value1, value2, value3) {
-		// Atualiza registro
-		data.updatedAt = new Date();
+	async update(constructionId, projectName, description, address, startDate, endDate, manager) {
+		const data = {
+			projectName,
+			description,
+			address,
+			startDate: Util.formatDate(startDate),
+			endDate: endDate ? Util.formatDate(endDate) : null,
+			manager,
+			updatedAt: Util.currentDateTime('America/Sao_Paulo')
+		};
+
 		const result = await Construction.updateOne(
 			{ _id: new ObjectId(constructionId) },
-			{ $set: {
-                value_1: value1,
-                value_2: value2,
-                value_3: value3,
-                updatedAt: Util.currentDateTime('America/Sao_Paulo')
-            } }
+			{ $set: data }
 		);
 		if (result.matchedCount === 0) return { error: "Não encontrado." };
-		return await this.find(id);
+		return await this.find(constructionId);
 	}
 
 	async delete(constructionId) {

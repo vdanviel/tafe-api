@@ -1,0 +1,70 @@
+Collection: construction
+{
+  "_id": ObjectId("651d9545a1f6a1e3b4a2c005"),
+  "projectName": "Edifício Central Park",
+  "description": "Detalhes sobre o projeto, escopo, etc.",
+  "address": {
+    "street": "Av. Brasil",
+    "number": "1000",
+    "complement": "Bloco A",
+    "neighborhood": "Jardim América",
+    "city": "São Paulo"
+  },
+  "startDate": "2023-11-20 00:00:00",
+  "endDate": null,
+  "manager": "Eng. João Silva"
+}
+
+Collection: accident
+{
+  "_id": ObjectId("651d9545a1f6a1e3b4a2c004"),
+  "cause": "Falha na manutenção do equipamento",
+  "description": "Corte superficial no braço esquerdo durante o manuseio de uma serra circular. O funcionário estava usando EPI, mas o equipamento não estava calibrado corretamente.",
+  "severity": "Moderado",
+  "construction": {
+    "_id": ObjectId("651d9545a1f6a1e3b4a2c005"),
+    "projectName": "Edifício Central Park",
+    "description": "Detalhes sobre o projeto, escopo, etc.",
+    "address": {
+        "street": "Av. Brasil",
+        "number": "1000",
+        "complement": "Bloco A",
+        "neighborhood": "Jardim América",
+        "city": "São Paulo"
+    },
+    "startDate": "2023-11-20 00:00:00",
+    "endDate": null,
+    "manager": "Eng. João Silva"
+  },
+  "reporter": { // Dados do utilizador do app que reportou o acidente
+    "_id":"68d4878df3ca69de3f706b4a",
+    "name":"stuff",
+    "email":"stuffshopecommerce@gmail.com",
+    "phone":"11 992838289",
+    "password":"$2b$10$75mt0EHu/mGJoRVGmSdUxe1peGrhMFK5qSBDZgp1O9VfGZ/G4ndPS",
+    "token":"324dd8e0-9286-40ca-8688-5633cdd1dd81",
+    "status":true,
+    "createdAt":"2025-09-24 21:06",
+    "updatedAt":"2025-09-24 21:06"
+  },
+  "involved": {// Dados das pessoas envolvidas no acidente
+    [
+        {
+          "firstName": "João",
+          "lastName": "Santos",
+          "objectInvolved": "Serra Circular",
+          "hurted": true,
+          "additionalInformation": null
+        },
+        {
+          "firstName": "Lucas",
+          "lastName": "Araújo",
+          "objectInvolved": null,
+          "hurted": false,
+          "additionalInformation": null
+        },
+    ]
+  },
+  "createdAt":"2025-09-26 10:06",
+  "updatedAt":"2025-09-26 10:06"
+}
